@@ -19,6 +19,35 @@ MEAS = {int(r["encoding"].split("p=")[1]): r for r in S["rows"] if r["n"] == 4 a
         and r["shots"] == 1000}
 SCALE = S["scale"]
 
+
+# ---------------------------------------------------------------- puzzle figures (starter's drawing helpers)
+import matplotlib
+
+matplotlib.use("Agg")
+import resources.helpers as helpers
+from src.insanity import CHOICES, cost_table
+
+CUBES = [["GR", "BR", "GY"], ["GY", "RB", "BY"], ["BR", "RG", "RY"], ["YR", "RG", "BG"]]
+ANSWER = [CHOICES[int(k)] for k in min(zip(*(cost_table(CUBES) == 0).nonzero()))]   # (front/back, left/right) per cube
+
+
+def figure(path, draw, *args, **kw):
+    """Run one of the starter's draw_* helpers and save its figure to path instead of showing it."""
+    saved = helpers.show
+    helpers.show = lambda fig: (fig.savefig(path, dpi=200, bbox_inches="tight", transparent=True),
+                                helpers.plt.close(fig))
+    try:
+        draw(*args, **kw)
+    finally:
+        helpers.show = saved
+
+
+figure("results/fig_nets.png", helpers.draw_nets, CUBES, title="")
+figure("results/fig_tower.png", helpers.draw_tower, helpers.tower_from(CUBES, ANSWER))
+figure("results/fig_graph.png", helpers.draw_graph, CUBES)
+figure("results/fig_graph_fb.png", helpers.draw_graph, CUBES, [fb for fb, _ in ANSWER], title="front/back picks")
+figure("results/fig_graph_lr.png", helpers.draw_graph, CUBES, [lr for _, lr in ANSWER], title="left/right picks")
+
 TEAL, AMBER, INK, GREY, LIGHT, WHITE = (RGBColor.from_string(h) for h in
                                         ("0E9488", "C2772A", "1B2433", "5B6575", "E8F4F3", "FFFFFF"))
 DARK = RGBColor.from_string("13202B")
@@ -128,49 +157,53 @@ s.notes_slide.notes_text_frame.text = "Speaker 1: introduce the team and the one
 s = prs.slides.add_slide(BLANK)
 title(s, "The puzzle: 8 good towers out of 331,776",
       "Stack 4 cubes so every side shows red, green, blue and yellow exactly once")
-stat(s, 0.8, 1.9, 3.6, "331,776", "ways to stack 4 cubes (24 orientations each)")
-stat(s, 0.8, 3.5, 3.6, "8", "solved: one tower seen from 8 angles", AMBER)
-stat(s, 0.8, 5.1, 3.6, f"{S['brute_seconds']:.2f} s", "for classical brute force to find them", GREY)
-card(s, 4.9, 1.9, 7.7, 4.3)
-text(s, 5.25, 2.15, 7.1, 4.5, [
-    [("Graph view", {"bold": True, "size": 20, "font": HEAD})],
-    "Colours are nodes; each cube's 3 opposite-face pairs are edges.",
-    "Front/back picks must touch every colour exactly twice (a 2-factor). So must the left/right picks, "
-    "using a different pair of the same cube.",
-    [("So each cube has only ", {}), ("6 choices", {"bold": True}),
-     (": an ordered pair (front/back pair, left/right pair).", {})],
-    [("6⁴ = 1,296 cases, of which ", {}), ("2", {"bold": True}), (" solve it (the tower and its quarter turn).", {})],
-    [("The general N-cube problem is NP-complete. We do not claim a speedup.", {"italic": True, "colour": GREY})],
-], size=17, space=10)
+text(s, 0.8, 1.65, 8.0, 0.4, "The four cubes, unfolded", size=13, colour=GREY, bold=True)
+s.shapes.add_picture("results/fig_nets.png", Inches(0.8), Inches(2.0), width=Inches(8.0))
+text(s, 9.7, 1.65, 3.0, 0.4, "The one solved tower", size=13, colour=GREY, bold=True)
+s.shapes.add_picture("results/fig_tower.png", Inches(9.8), Inches(2.0), height=Inches(2.05))
+stat(s, 0.8, 4.35, 3.0, "331,776", "ways to stack 4 cubes")
+stat(s, 4.0, 4.35, 2.3, "8", "solved: one tower, 8 views", AMBER)
+stat(s, 6.3, 4.35, 2.3, f"{S['brute_seconds']:.2f} s", "classical brute force", GREY)
+text(s, 0.8, 6.2, 7.6, 0.9, [[("The general N-cube problem is NP-complete. ", {"italic": True}),
+                              ("We do not claim a speedup.", {"italic": True})]], size=14, colour=GREY)
+text(s, 8.7, 4.2, 4.2, 0.4, "Graph view: colours are dots, opposite pairs are lines", size=12, colour=GREY, bold=True)
+card(s, 8.7, 4.6, 4.0, 2.6)
+s.shapes.add_picture("results/fig_graph.png", Inches(8.85), Inches(4.7), height=Inches(2.4))
 s.notes_slide.notes_text_frame.text = "Speaker 1: why it's hard by hand, why it's easy for a computer at N=4, and how the graph view shrinks it to 6 choices per cube."
 
 # ---------------------------------------------------------------- 3 encoding
 s = prs.slides.add_slide(BLANK)
-title(s, "Encoding: 6 choices fit in 3 qubits", "12 qubits for 4 cubes, half the starter's 24-qubit one-hot encoding")
+title(s, "The trick: 6 choices per cube fit in 3 qubits",
+      "Colours are dots, opposite-face pairs are lines. The answer's picks touch every colour exactly twice")
+s.shapes.add_picture("results/fig_graph_fb.png", Inches(0.6), Inches(1.75), height=Inches(2.55))
+s.shapes.add_picture("results/fig_graph_lr.png", Inches(0.6), Inches(4.4), height=Inches(2.55))
 rows = [("code", "bits", "front/back", "left/right")] + [
     (str(k), format(k, "03b"), str(fb), str(lr)) for k, (fb, lr) in
-    enumerate([(0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1)])] + [("6, 7", "11x", "unused", "never reached")]
-tbl = s.shapes.add_table(len(rows), 4, Inches(0.8), Inches(1.9), Inches(5.6), Inches(4.6)).table
+    enumerate([(0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1)])] + [("6, 7", "11x", "unused", "never")]
+tbl = s.shapes.add_table(len(rows), 4, Inches(4.75), Inches(1.95), Inches(3.9), Inches(4.2)).table
+for col, w in zip(tbl.columns, (0.65, 0.75, 1.25, 1.25)):
+    col.width = Inches(w)
 for i, row in enumerate(rows):
     for j, v in enumerate(row):
         cell = tbl.cell(i, j)
         cell.text = v
         p = cell.text_frame.paragraphs[0]
-        p.runs[0].font.size = Pt(15)
+        p.runs[0].font.size = Pt(13)
         p.runs[0].font.name = BODY
         p.runs[0].font.bold = i == 0
         p.runs[0].font.color.rgb = WHITE if i == 0 else INK
         cell.fill.solid()
         cell.fill.fore_color.rgb = TEAL if i == 0 else (LIGHT if i % 2 else WHITE)
-text(s, 7.0, 1.9, 5.6, 4.8, [
-    [("Same pair twice? ", {"bold": True}), ("Cannot be written down.", {})],
-    [("One pick per cube? ", {"bold": True}), ("Automatic.", {})],
-    [("Only rule left: ", {"bold": True}), ("every colour has degree 2 on each side pair.", {})],
-    [("Cost  C = Σ (d − 2)²", {"bold": True, "font": HEAD, "size": 20, "colour": TEAL})],
-    "Written with Z operators: “cube c holds code k” is a product of (1 ± Z)/2 on its 3 qubits. "
-    "Terms touch at most 6 qubits (two cubes). 164 terms at N = 4.",
+text(s, 9.0, 1.95, 3.8, 5.2, [
+    [("Front + back together ", {"bold": True}), ("show every colour twice, so pick one line per cube "
+                                                 "that touches each dot exactly twice (top left). Same for left + right (bottom left).", {})],
+    [("Which way round ", {"bold": True}), ("each pair faces can be fixed afterwards.", {})],
+    [("So a cube only picks ", {}), ("2 different pairs: 3 × 2 = 6 choices", {"bold": True}),
+     (", stored as a code 0 to 5 in 3 qubits.", {})],
+    [("Cost  C = Σ (d − 2)²", {"bold": True, "font": HEAD, "size": 19, "colour": TEAL})],
+    "d = how many picked lines touch a colour. C = 0 exactly for a solved tower. 164 Z terms at N = 4.",
     [("Codes 6 and 7 need no penalty: the circuit never creates them.", {"italic": True})],
-], size=17, space=12)
+], size=14, space=9)
 s.notes_slide.notes_text_frame.text = "Speaker 1: bit order — qubit 0 is the rightmost character in a Qiskit key; cube 1 is the last 3 characters. We tested the decoder on the known answer."
 
 # ---------------------------------------------------------------- 4 algorithm
