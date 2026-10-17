@@ -256,3 +256,97 @@ def two_qubit_gates_and_depth(qc):
     from qiskit import transpile
     t = transpile(qc, basis_gates=["rz", "sx", "x", "cx"], optimization_level=1, seed_transpiler=7)
     return t.count_ops().get("cx", 0), t.depth()
+
+
+# ---------------------------------------------------------------- bonus puzzles (copied from the starter)
+
+def make_puzzle(n, seed):
+    """N cubes, N colours, a planted answer: two random cycles through all colours.
+    Copied unchanged from the starter notebook."""
+    import random
+    rng = random.Random(seed)
+    letters = "".join(chr(ord("A") + i) for i in range(n))
+    cycles = []
+    for _ in range(2):
+        order = rng.sample(letters, n)
+        lines = [order[i] + order[(i + 1) % n] for i in range(n)]
+        rng.shuffle(lines)
+        cycles.append(lines)
+    cubes = []
+    for i in range(n):
+        third = rng.choice(letters) + rng.choice(letters)
+        pairs = ["".join(rng.sample(pair, 2)) for pair in (cycles[0][i], cycles[1][i], third)]
+        rng.shuffle(pairs)
+        cubes.append(pairs)
+    return cubes
+
+
+def count_answers(cubes):
+    """How many of the 6**n cases solve the puzzle. Copied unchanged from the starter."""
+    letters = sorted({ch for cube in cubes for pair in cube for ch in pair})
+    total = 0
+    for choice in itertools.product(CHOICES, repeat=len(cubes)):
+        for side in (0, 1):
+            deg = dict.fromkeys(letters, 0)
+            for cube, pick in zip(cubes, choice):
+                for ch in cube[pick[side]]:
+                    deg[ch] += 1
+            if any(d != 2 for d in deg.values()):
+                break
+        else:
+            total += 1
+    return total
+
+
+BONUS_SEEDS = {5: 16, 6: 86, 7: 68, 8: 4}   # each gives exactly one tower (2 graph-level cases)
+
+
+# ---------------------------------------------------------------- tuning the angles
+
+def _interp(x):
+    """INTERP warm start: stretch a p-layer schedule to p + 1 layers."""
+    x = np.asarray(x, dtype=float)
+    q = len(x)
+    return np.interp(np.linspace(0, 1, q + 1), np.linspace(0, 1, q), x)
+
+
+def tune(sim, p_max, maxiter, previous=None, start=(0.26, 5.55), log=print):
+    """Grow the circuit one layer at a time. At each depth p, minimise the AVERAGE
+    COST (the solutions are never used), starting from
+      * the depth p-1 angles stretched to p layers (INTERP), and
+      * if given, the depth-p angles tuned on the next smaller puzzle (transfer).
+    Returns a list of dicts, one per depth: p, average cost E, P(correct) P, gammas, betas.
+    The p = 1 start (0.26, 5.55) is the best point of a 61 x 61 grid on the N = 4 puzzle."""
+    from scipy.optimize import minimize
+    out, gam, bet = [], [start[0]], [start[1]]
+    for p in range(1, p_max + 1):
+        f = lambda x: sim.stats(x[:p], x[p:])[0]
+        starts = [np.array(start)] if p == 1 else [np.concatenate([_interp(gam), _interp(bet)])]
+        if previous is not None and len(previous) >= p:
+            starts.append(np.concatenate([previous[p - 1]["g"], previous[p - 1]["b"]]))
+        best = None
+        for x0 in starts:
+            r = minimize(f, x0, method="COBYLA", options={"maxiter": maxiter, "rhobeg": 0.1})
+            if best is None or r.fun < best.fun:
+                best = r
+        gam, bet = list(best.x[:p]), list(best.x[p:])
+        e, s = sim.stats(gam, bet)
+        out.append(dict(p=p, E=e, P=s, g=gam, b=bet))
+        if log:
+            log(f"  p={p:2d}: average cost {e:6.3f}, P(correct) {s:7.2%}")
+    return out
+
+
+def sample_counts(sim, gammas, betas, shots, seed):
+    """Draw shots from the EXACT output distribution (no circuit simulator needed).
+    Used only for the large bonus circuits when no qBraid device is available,
+    and labelled 'exact sim (local)' in every table."""
+    probs = (np.abs(sim.state(gammas, betas)) ** 2).ravel()
+    rng = np.random.default_rng(seed)
+    idx = rng.choice(len(probs), size=shots, p=probs / probs.sum())
+    counts = {}
+    for i in idx:
+        codes = list(np.unravel_index(i, (N_CODES,) * sim.n))
+        key = codes_to_bitstring([int(k) for k in codes])
+        counts[key] = counts.get(key, 0) + 1
+    return counts
