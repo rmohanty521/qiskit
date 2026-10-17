@@ -1,0 +1,43 @@
+N = 4
+  p= 1: average cost  4.621, P(correct)   1.10%
+  p= 2: average cost  3.516, P(correct)   2.74%
+  p= 3: average cost  3.040, P(correct)   4.77%
+  p= 4: average cost  2.646, P(correct)   8.81%
+  p= 5: average cost  2.316, P(correct)  14.18%
+  p= 6: average cost  2.074, P(correct)  21.14%
+  p= 7: average cost  1.836, P(correct)  32.19%
+  p= 8: average cost  1.582, P(correct)  41.80%
+  p= 9: average cost  1.335, P(correct)  50.13%
+  p=10: average cost  1.139, P(correct)  57.88%
+  9 s
+N = 5
+  p= 1: average cost  5.772, P(correct)   0.21%
+  p= 2: average cost  4.483, P(correct)   0.52%
+  p= 3: average cost  3.789, P(correct)   1.02%
+  p= 4: average cost  3.351, P(correct)   1.69%
+  p= 5: average cost  3.013, P(correct)   2.68%
+  p= 6: average cost  2.727, P(correct)   3.90%
+  p= 7: average cost  2.489, P(correct)   5.35%
+  p= 8: average cost  2.315, P(correct)   6.68%
+  p= 9: average cost  2.179, P(correct)   7.92%
+  p=10: average cost  2.076, P(correct)   9.11%
+  27 s
+N = 6
+  p= 1: average cost  8.563, P(correct)   0.06%
+  p= 2: average cost  6.547, P(correct)   0.25%
+  p= 3: average cost  5.473, P(correct)   0.57%
+  p= 4: average cost  4.782, P(correct)   1.04%
+  p= 5: average cost  4.301, P(correct)   1.67%
+  p= 6: average cost  3.940, P(correct)   2.54%
+  p= 7: average cost  3.654, P(correct)   3.72%
+  p= 8: average cost  3.419, P(correct)   5.24%
+  p= 9: average cost  3.211, P(correct)   7.20%
+  p=10: average cost  3.019, P(correct)   9.46%
+  164 s
+N = 7
+  p= 1: average cost  9.623, P(correct)   0.02%
+  p= 2: average cost  7.379, P(correct)   0.11%
+  p= 3: average cost  6.225, P(correct)   0.27%
+  p= 4: average cost  5.490, P(correct)   0.52%
+  p= 5: average cost  4.966, P(correct)   0.84%
+  p= 6: average cost  4.576, P(correct)   1.19%

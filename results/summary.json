@@ -1,0 +1,198 @@
+{
+ "rows": [
+  {
+   "n": "4 (front/back only, warm-up)",
+   "encoding": "one-hot 3/cube, W-state + XY mixer, p=2",
+   "device": "local Aer (SV1 pending)",
+   "qubits": 12,
+   "cx": 300,
+   "depth": 215,
+   "shots": 1000,
+   "p": 0.282,
+   "baseline": "0.098% (bitstring) / 4.9% (one-hot)",
+   "job": "TODO: run in qBraid Lab"
+  },
+  {
+   "n": 4,
+   "encoding": "compact 3 qubits/cube, constrained QAOA p=1",
+   "device": "local Aer (SV1 pending)",
+   "qubits": 12,
+   "cx": 550,
+   "depth": 522,
+   "shots": 1000,
+   "p": 0.011,
+   "baseline": "0.049% (bitstring) / 0.15% (valid)",
+   "job": "TODO: run in qBraid Lab"
+  },
+  {
+   "n": 4,
+   "encoding": "compact 3 qubits/cube, constrained QAOA p=4",
+   "device": "local Aer (SV1 pending)",
+   "qubits": 12,
+   "cx": 2188,
+   "depth": 2040,
+   "shots": 1000,
+   "p": 0.085,
+   "baseline": "0.049% (bitstring) / 0.15% (valid)",
+   "job": "TODO: run in qBraid Lab"
+  },
+  {
+   "n": 4,
+   "encoding": "compact 3 qubits/cube, constrained QAOA p=8",
+   "device": "local Aer (SV1 pending)",
+   "qubits": 12,
+   "cx": 4372,
+   "depth": 4064,
+   "shots": 1000,
+   "p": 0.393,
+   "baseline": "0.049% (bitstring) / 0.15% (valid)",
+   "job": "TODO: run in qBraid Lab"
+  },
+  {
+   "n": 4,
+   "encoding": "compact 3 qubits/cube, constrained QAOA p=12",
+   "device": "local Aer (SV1 pending)",
+   "qubits": 12,
+   "cx": 6556,
+   "depth": 6088,
+   "shots": 1000,
+   "p": 0.704,
+   "baseline": "0.049% (bitstring) / 0.15% (valid)",
+   "job": "TODO: run in qBraid Lab"
+  },
+  {
+   "n": 4,
+   "encoding": "compact 3 qubits/cube, constrained QAOA p=10",
+   "device": "local Aer (SV1 pending)",
+   "qubits": 12,
+   "cx": 5464,
+   "depth": 5076,
+   "shots": 2000,
+   "p": 0.566,
+   "baseline": "0.00049 (bitstring) / 0.0015 (valid)",
+   "job": "TODO: run in qBraid Lab"
+  },
+  {
+   "n": 5,
+   "encoding": "compact 3 qubits/cube, constrained QAOA p=10",
+   "device": "local Aer (SV1 pending)",
+   "qubits": 15,
+   "cx": 9285,
+   "depth": 8591,
+   "shots": 2000,
+   "p": 0.1025,
+   "baseline": "6.1e-05 (bitstring) / 0.00026 (valid)",
+   "job": "TODO: run in qBraid Lab"
+  },
+  {
+   "n": 6,
+   "encoding": "compact 3 qubits/cube, constrained QAOA p=10",
+   "device": "local Aer (SV1 pending)",
+   "qubits": 18,
+   "cx": 13446,
+   "depth": 12001,
+   "shots": 2000,
+   "p": 0.087,
+   "baseline": "7.6e-06 (bitstring) / 4.3e-05 (valid)",
+   "job": "TODO: run in qBraid Lab"
+  }
+ ],
+ "scale": [
+  {
+   "n": 4,
+   "qubits": 12,
+   "terms": 164,
+   "cx": 5464,
+   "depth": 5076,
+   "exact": 0.5787952599097943,
+   "measured": 0.566,
+   "rand_valid": 0.0015432098765432098,
+   "rand_bits": 0.00048828125
+  },
+  {
+   "n": 5,
+   "qubits": 15,
+   "terms": 276,
+   "cx": 9285,
+   "depth": 8591,
+   "exact": 0.09108621479612343,
+   "measured": 0.1025,
+   "rand_valid": 0.000257201646090535,
+   "rand_bits": 6.103515625e-05
+  },
+  {
+   "n": 6,
+   "qubits": 18,
+   "terms": 430,
+   "cx": 13446,
+   "depth": 12001,
+   "exact": 0.09456350094970882,
+   "measured": 0.087,
+   "rand_valid": 4.286694101508916e-05,
+   "rand_bits": 7.62939453125e-06
+  }
+ ],
+ "core": [
+  {
+   "p": 1,
+   "E": 4.620962192961216,
+   "P": 0.010961662038328138
+  },
+  {
+   "p": 2,
+   "E": 3.51566584540944,
+   "P": 0.027401945239748336
+  },
+  {
+   "p": 3,
+   "E": 3.0399176687201743,
+   "P": 0.04770083253530374
+  },
+  {
+   "p": 4,
+   "E": 2.645771726874637,
+   "P": 0.08809578866580607
+  },
+  {
+   "p": 5,
+   "E": 2.3164429267455486,
+   "P": 0.14180562348913517
+  },
+  {
+   "p": 6,
+   "E": 2.0744492885896646,
+   "P": 0.21142390693470475
+  },
+  {
+   "p": 7,
+   "E": 1.836411218110537,
+   "P": 0.3219245775427265
+  },
+  {
+   "p": 8,
+   "E": 1.582296382583797,
+   "P": 0.4179890042658713
+  },
+  {
+   "p": 9,
+   "E": 1.3350469932348283,
+   "P": 0.5013215613506805
+  },
+  {
+   "p": 10,
+   "E": 1.1387711035027621,
+   "P": 0.5787952599097943
+  },
+  {
+   "p": 11,
+   "E": 0.9560489066384117,
+   "P": 0.6593606021241409
+  },
+  {
+   "p": 12,
+   "E": 0.7685651276573111,
+   "P": 0.7287012047228751
+  }
+ ],
+ "brute_seconds": 0.13556907599991064
+}
