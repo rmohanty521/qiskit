@@ -1,1 +1,62 @@
-[]
+[
+ {
+  "label": "warm-up front/back p=2",
+  "job_id": "aws:aws:sim:sv1-60f2-qjob-6ad384c338127b44c71b9a46",
+  "shots": 1000,
+  "device": "aws:aws:sim:sv1"
+ },
+ {
+  "label": "core N=4 p=1",
+  "job_id": "aws:aws:sim:sv1-60f2-qjob-6ad384d338127b44c71b9a53",
+  "shots": 1000,
+  "device": "aws:aws:sim:sv1"
+ },
+ {
+  "label": "core N=4 p=4",
+  "job_id": "aws:aws:sim:sv1-60f2-qjob-6ad3850138127b44c71b9a5a",
+  "shots": 1000,
+  "device": "aws:aws:sim:sv1"
+ },
+ {
+  "label": "core N=4 p=8",
+  "job_id": "aws:aws:sim:sv1-60f2-qjob-6ad3853638127b44c71b9a74",
+  "shots": 1000,
+  "device": "aws:aws:sim:sv1"
+ },
+ {
+  "label": "core N=4 p=12",
+  "job_id": "aws:aws:sim:sv1-60f2-qjob-6ad3857838127b44c71b9a82",
+  "shots": 1000,
+  "device": "aws:aws:sim:sv1"
+ },
+ {
+  "label": "bonus N=4 p=10",
+  "job_id": "aws:aws:sim:sv1-60f2-qjob-6ad385c138127b44c71b9a96",
+  "shots": 2000,
+  "device": "aws:aws:sim:sv1"
+ },
+ {
+  "label": "bonus N=5 p=10",
+  "job_id": "aws:aws:sim:sv1-60f2-qjob-6ad3860638127b44c71b9aa4",
+  "shots": 2000,
+  "device": "aws:aws:sim:sv1"
+ },
+ {
+  "label": "bonus N=6 p=10",
+  "job_id": "aws:aws:sim:sv1-60f2-qjob-6ad3866a38127b44c71b9aba",
+  "shots": 2000,
+  "device": "aws:aws:sim:sv1"
+ },
+ {
+  "label": "bonus N=7 p=10",
+  "job_id": "aws:aws:sim:sv1-60f2-qjob-6ad386e638127b44c71b9ae7",
+  "shots": 2000,
+  "device": "aws:aws:sim:sv1"
+ },
+ {
+  "label": "bonus N=8 p=10",
+  "job_id": "aws:aws:sim:sv1-60f2-qjob-6ad3876738127b44c71b9b23",
+  "shots": 2000,
+  "device": "aws:aws:sim:sv1"
+ }
+]

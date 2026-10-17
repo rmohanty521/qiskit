@@ -118,7 +118,7 @@ tower(s, 0.9, 2.0, 0.42)
 text(s, 1.8, 1.85, 10.5, 1.2, "Instant Insanity on 12 qubits", size=48, font=HEAD, bold=True, colour=WHITE)
 text(s, 1.8, 3.0, 10.5, 1.0, "A compact encoding and constrained QAOA, checked against brute force at every step",
      size=20, colour=RGBColor.from_string("B8C4CC"))
-text(s, 1.8, 4.6, 10.5, 1.2, ["Team: [add names]",
+text(s, 1.8, 4.6, 10.5, 1.2, ["Team: Zain Irfan, Mark Gebuza, Rithwik Mohanty",
                               "Qiskit Fall Fest CT 2026 · qBraid challenge · warm-up, core and bonus (N = 4 to 8)"],
      size=16, colour=RGBColor.from_string("B8C4CC"))
 s.notes_slide.notes_text_frame.text = "Speaker 1: introduce the team and the one-line story: 3 qubits per cube, a mixer that only allows legal moves, and classical checks everywhere."
@@ -129,7 +129,7 @@ title(s, "The puzzle: 8 good towers out of 331,776",
       "Stack 4 cubes so every side shows red, green, blue and yellow exactly once")
 stat(s, 0.8, 1.9, 3.6, "331,776", "ways to stack 4 cubes (24 orientations each)")
 stat(s, 0.8, 3.5, 3.6, "8", "solved: one tower seen from 8 angles", AMBER)
-stat(s, 0.8, 5.1, 3.6, "0.14 s", "for classical brute force to find them", GREY)
+stat(s, 0.8, 5.1, 3.6, f"{S['brute_seconds']:.2f} s", "for classical brute force to find them", GREY)
 card(s, 4.9, 1.9, 7.7, 4.3)
 text(s, 5.25, 2.15, 7.1, 4.5, [
     [("Graph view", {"bold": True, "size": 20, "font": HEAD})],
@@ -170,7 +170,7 @@ text(s, 7.0, 1.9, 5.6, 4.8, [
     "Terms touch at most 6 qubits (two cubes). 164 terms at N = 4.",
     [("Codes 6 and 7 need no penalty: the circuit never creates them.", {"italic": True})],
 ], size=17, space=12)
-s.notes_slide.notes_text_frame.text = "Speaker 2: bit order — qubit 0 is the rightmost character in a Qiskit key; cube 1 is the last 3 characters. We tested the decoder on the known answer."
+s.notes_slide.notes_text_frame.text = "Speaker 1: bit order — qubit 0 is the rightmost character in a Qiskit key; cube 1 is the last 3 characters. We tested the decoder on the known answer."
 
 # ---------------------------------------------------------------- 4 algorithm
 s = prs.slides.add_slide(BLANK)
@@ -197,8 +197,8 @@ title(s, "Classical checks before any claim", "Every check is an assert in the n
 checks = [("H = classical cost", "N = 4 to 6: every valid state; N = 7, 8: 3,000 random ones. Largest gap 0."),
           ("Lowest energy = the answer", "exactly 2 zero-cost states = count_answers = graph method; no ties (next cost is 2)."),
           ("Independent cost agrees", "the starter's 24-qubit QUBO is zero on the same 2 states."),
-          ("Circuit stays legal", "start state is 1/6 on each valid code; leakage to codes 6, 7 is 7e-15; 0 invalid shots."),
-          ("Fast simulator = Qiskit", "our 6^N simulator matches Statevector of the real circuit to 5e-17."),
+          ("Circuit stays legal", "start state is 1/6 on each valid code; leakage to codes 6, 7 is 2e-15; 0 invalid shots."),
+          ("Fast simulator = Qiskit", "our 6^N simulator matches Statevector of the real circuit to 3e-17."),
           ("Every tower checked", "each measured shot is decoded (qubit 0 = rightmost bit) and passed to solves().")]
 for i, (h, d) in enumerate(checks):
     col, row = i % 2, i // 2
@@ -216,7 +216,7 @@ for i, (h, d) in enumerate(checks):
     tf.paragraphs[0].runs[0].font.bold = True
     text(s, x + 1.05, y + 0.15, 4.55, 1.2, [[(h, {"bold": True, "size": 16})], [(d, {"size": 13, "colour": GREY})]],
          space=3)
-s.notes_slide.notes_text_frame.text = "Speaker 3: this is the slide for the tie-break criterion. Say how each check would catch a bug."
+s.notes_slide.notes_text_frame.text = "Speaker 2: this is the slide for the tie-break criterion. Say how each check would catch a bug."
 
 # ---------------------------------------------------------------- 6 results N = 4
 s = prs.slides.add_slide(BLANK)
@@ -240,7 +240,7 @@ ser.marker.style = XL_MARKER_STYLE.CIRCLE
 ser.marker.format.fill.solid()
 ser.marker.format.fill.fore_color.rgb = TEAL
 ser.smooth = False
-rows = [("p", "CX", "depth", "shots", "exact")] + [
+rows = [("p", "CX", "depth", "SV1", "exact")] + [
     (str(p), f"{MEAS[p]['cx']:,}", f"{MEAS[p]['depth']:,}", pct(MEAS[p]["p"]), pct(CORE[p]["P"])) for p in sorted(MEAS)]
 tbl = s.shapes.add_table(len(rows), 5, Inches(8.5), Inches(1.9), Inches(4.3), Inches(2.6)).table
 for i, row in enumerate(rows):
@@ -259,7 +259,7 @@ text(s, 8.5, 4.75, 4.3, 2.0, [
      ("Measured shots match the exact value within shot noise.", {})],
     [("Warm-up (front/back only, starter): ", {"bold": True}),
      (f"{pct(S['rows'][0]['p'])} good picks at p = 2.", {})]], size=14, space=8)
-s.notes_slide.notes_text_frame.text = "Speaker 3: the line is the exact simulation; the table is shots. Point out the baseline and that no shot was an illegal code."
+s.notes_slide.notes_text_frame.text = "Speaker 2: the line is the exact simulation; the table is shots. Point out the baseline and that no shot was an illegal code."
 
 # ---------------------------------------------------------------- 7 bonus
 s = prs.slides.add_slide(BLANK)
@@ -291,10 +291,11 @@ for ser, col in zip(ch.plots[0].series, (TEAL, GREY)):
     ser.marker.format.fill.solid()
     ser.marker.format.fill.fore_color.rgb = col
     ser.smooth = False
-rows = [("N", "qubits", "CX", "P(correct)", "× random")] + [
-    (str(r["n"]), str(r["qubits"]), f"{r['cx']:,}", pct(r["exact"]), f"{r['exact'] / r['rand_valid']:,.0f}")
+rows = [("N", "qubits", "CX", "exact", "SV1 shots", "× random")] + [
+    (str(r["n"]), str(r["qubits"]), f"{r['cx']:,}", pct(r["exact"]), pct(r["measured"]),
+     f"{r['exact'] / r['rand_valid']:,.0f}")
     for r in SCALE]
-tbl = s.shapes.add_table(len(rows), 5, Inches(7.7), Inches(1.9), Inches(5.1), Inches(3.0)).table
+tbl = s.shapes.add_table(len(rows), 6, Inches(7.7), Inches(1.9), Inches(5.1), Inches(3.0)).table
 for i, row in enumerate(rows):
     for j, v in enumerate(row):
         cell = tbl.cell(i, j)
@@ -308,7 +309,7 @@ text(s, 7.7, 5.15, 5.1, 1.7, [
     "Qubits grow as 3N; CNOTs per layer grow about linearly here (550 → 2,100).",
     "At fixed depth success falls with N, but more slowly than random guessing: "
     "the advantage over guessing grows. Keeping success high would need more layers."], size=14, space=8)
-s.notes_slide.notes_text_frame.text = "Speaker 4: angles for N=5-8 were tuned offline with the same function and reloaded; the notebook recomputes their success. N=7,8 local shots come from the exact distribution unless run on SV1."
+s.notes_slide.notes_text_frame.text = "Speaker 3: angles for N=5-8 were tuned offline with the same function and reloaded; the notebook recomputes their success. N=7,8 local shots come from the exact distribution unless run on SV1."
 
 # ---------------------------------------------------------------- 8 takeaways
 s = prs.slides.add_slide(BLANK)
@@ -320,7 +321,7 @@ text(s, 0.9, 1.8, 5.6, 5, [
     [("Learned", {"bold": True, "size": 22, "colour": RGBColor.from_string("5FD4C8"), "font": HEAD})],
     "Building the rules into the encoding (3 qubits per cube) beat penalty terms: fewer qubits, nothing to tune, no wasted shots.",
     "QAOA really concentrates probability on the answer, and checks show it is the right answer.",
-    "No speedup: brute force takes 0.14 s, and tuning needed a full classical simulation.",
+    f"No speedup: brute force takes {S['brute_seconds']:.2f} s, and tuning needed a full classical simulation.",
     "Success at fixed depth falls with N; gates grow with N.",
 ], size=16, colour=soft, space=12)
 text(s, 7.0, 1.8, 5.6, 5, [
@@ -332,7 +333,7 @@ text(s, 7.0, 1.8, 5.6, 5, [
     [("AI use: Claude Code wrote code and docs; every model was checked against brute force.",
       {"italic": True})],
 ], size=16, colour=soft, space=12)
-s.notes_slide.notes_text_frame.text = "Speaker 4: close with honesty — what works, what doesn't scale, and the one next experiment."
+s.notes_slide.notes_text_frame.text = "Speaker 3: close with honesty — what works, what doesn't scale, and the one next experiment."
 
 prs.save("slides.pptx")
 print("wrote slides.pptx with", len(prs.slides), "slides")

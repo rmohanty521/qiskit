@@ -1,0 +1,27 @@
+N = 4: already tuned, kept
+N = 5: already tuned, kept
+N = 6: already tuned, kept
+N = 7
+  p= 1: average cost  9.623, P(correct)   0.02%
+  p= 2: average cost  7.379, P(correct)   0.11%
+  p= 3: average cost  6.225, P(correct)   0.27%
+  p= 4: average cost  5.490, P(correct)   0.52%
+  p= 5: average cost  4.966, P(correct)   0.84%
+  p= 6: average cost  4.576, P(correct)   1.21%
+  p= 7: average cost  4.273, P(correct)   1.67%
+  p= 8: average cost  4.030, P(correct)   2.22%
+  p= 9: average cost  3.833, P(correct)   2.83%
+  p=10: average cost  3.668, P(correct)   3.48%
+  112 s
+N = 8
+  p= 1: average cost 12.185, P(correct)   0.01%
+  p= 2: average cost  9.003, P(correct)   0.06%
+  p= 3: average cost  7.251, P(correct)   0.18%
+  p= 4: average cost  6.176, P(correct)   0.37%
+  p= 5: average cost  5.429, P(correct)   0.78%
+  p= 6: average cost  4.923, P(correct)   1.44%
+  p= 7: average cost  4.525, P(correct)   2.02%
+  p= 8: average cost  4.207, P(correct)   3.18%
+  p= 9: average cost  3.949, P(correct)   4.47%
+  p=10: average cost  3.731, P(correct)   4.29%
+  401 s

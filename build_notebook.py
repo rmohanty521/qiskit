@@ -640,7 +640,7 @@ md(r"""
   legal guess. The angles were tuned on the average cost only, never on the answer.
 * **No speedup.** Brute force checks all 331,776 towers in well under a second, and tuning the angles needed a classical simulation of the whole state.
   This is a demonstration that the method works and is checked, not a faster solver.
-* **It gets harder with N.** At a fixed depth (p = 10) success falls from about 58% (N = 4) to well under 1% (N = 8), while the random baseline falls even faster
+* **It gets harder with N.** At a fixed depth (p = 10) success falls from about 58% (N = 4) to about 4% (N = 8; 3.3% measured on SV1), while the random baseline falls even faster
   (a factor 6 per cube); the ratio over random guessing grows with N. Two-qubit gates per layer grew from about 550 (N = 4) to about 2,100 (N = 8), close to linear in N for these puzzles
   (in the worst case the Hamiltonian has terms for every pair of cubes that share a colour, so up to N²). Keeping success constant would need more layers as N grows; we did not measure how many.
 * **The cost terms are long.** Terms touch up to 6 qubits, so each needs a CNOT ladder; one layer is about 550 CNOTs at N = 4. That is fine on a simulator but too
