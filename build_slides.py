@@ -297,10 +297,11 @@ s.notes_slide.notes_text_frame.text = "Speaker 2: the line is the exact simulati
 
 # ---------------------------------------------------------------- 7 bonus
 s = prs.slides.add_slide(BLANK)
-title(s, "Bonus: same method for N cubes and N colours",
+title(s, "Bonus: same method for N cubes and N colors",
       "make_puzzle seeds {5: 16, 6: 86, 7: 68, 8: 4}, each with exactly one tower; depth fixed at p = 10")
 cd = CategoryChartData()
 cd.categories = [str(r["n"]) for r in SCALE]
+cd.add_series("classical graph method", [1.0 for r in SCALE])
 cd.add_series("QAOA p = 10", [r["exact"] for r in SCALE])
 cd.add_series("random legal guess", [r["rand_valid"] for r in SCALE])
 ch = s.shapes.add_chart(XL_CHART_TYPE.LINE_MARKERS, Inches(0.7), Inches(1.8), Inches(6.6), Inches(5.0), cd).chart
@@ -320,12 +321,13 @@ ch.has_title = False
 ch.has_legend = True
 ch.legend.position = XL_LEGEND_POSITION.BOTTOM
 ch.legend.include_in_layout = False
-for ser, col in zip(ch.plots[0].series, (TEAL, GREY)):
+for ser, col in zip(ch.plots[0].series, (AMBER, TEAL, GREY)):
     ser.format.line.color.rgb = col
     ser.format.line.width = Pt(2.5)
     ser.marker.style = XL_MARKER_STYLE.CIRCLE
     ser.marker.format.fill.solid()
     ser.marker.format.fill.fore_color.rgb = col
+    ser.marker.format.line.color.rgb = col
     ser.smooth = False
 rows = [("N", "qubits", "CX", "exact", "SV1 shots", "× random")] + [
     (str(r["n"]), str(r["qubits"]), f"{r['cx']:,}", pct(r["exact"]), pct(r["measured"]),
@@ -341,10 +343,13 @@ for i, row in enumerate(rows):
         r.font.color.rgb = WHITE if i == 0 else INK
         cell.fill.solid()
         cell.fill.fore_color.rgb = TEAL if i == 0 else (LIGHT if i % 2 else WHITE)
-text(s, 7.7, 5.15, 5.1, 1.7, [
-    "Qubits grow as 3N; CNOTs per layer grow about linearly here (550 → 2,100).",
-    "At fixed depth success falls with N, but more slowly than random guessing: "
-    "the advantage over guessing grows. Keeping success high would need more layers."], size=14, space=8)
+GRAPH_MS_8 = 1000 * next(r["graph_s"] for r in json.load(open("results/classical_times.json")) if r["n"] == 8)
+text(s, 7.7, 5.1, 5.1, 1.9, [
+    [("Beats guessing, loses to classical. ", {"bold": True}),
+     ("At fixed depth our success falls with N, but more slowly than random guessing, so the gap over guessing grows.", {})],
+    [("The textbook classical method ", {"bold": True, "colour": AMBER}),
+     (f"(the same color graph) always finds the tower, in {GRAPH_MS_8:.0f} ms at N = 8.", {})]],
+     size=13, space=8)
 s.notes_slide.notes_text_frame.text = "Speaker 3: angles for N=5-8 were tuned offline with the same function and reloaded; the notebook recomputes their success. N=7,8 local shots come from the exact distribution unless run on SV1."
 
 # ---------------------------------------------------------------- 8 takeaways
