@@ -7,7 +7,8 @@ import json
 from pptx import Presentation
 from pptx.chart.data import CategoryChartData, XyChartData
 from pptx.dml.color import RGBColor
-from pptx.enum.chart import XL_CHART_TYPE, XL_LEGEND_POSITION, XL_MARKER_STYLE
+from pptx.enum.chart import (XL_AXIS_CROSSES, XL_CHART_TYPE, XL_LEGEND_POSITION, XL_MARKER_STYLE,
+                             XL_TICK_LABEL_POSITION)
 from pptx.enum.shapes import MSO_SHAPE
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.util import Inches, Pt
@@ -272,7 +273,7 @@ cd.add_series("random legal guess", [r["rand_valid"] for r in SCALE])
 ch = s.shapes.add_chart(XL_CHART_TYPE.LINE_MARKERS, Inches(0.7), Inches(1.8), Inches(6.6), Inches(5.0), cd).chart
 style_chart(ch, "P(correct tower), log scale", "N cubes")
 va = ch.value_axis
-va.tick_labels.number_format = "0.000%"
+va.tick_labels.number_format = "[>=0.01]0%;[>=0.00001]0.0##%;0.0000%"
 va.tick_labels.number_format_is_linked = False
 from lxml import etree
 scaling = va._element.find("{http://schemas.openxmlformats.org/drawingml/2006/chart}scaling")
@@ -280,6 +281,8 @@ lb = etree.SubElement(scaling, "{http://schemas.openxmlformats.org/drawingml/200
 lb.set("val", "10")
 scaling.remove(lb)
 scaling.insert(0, lb)
+va.crosses = XL_AXIS_CROSSES.MINIMUM                     # N labels along the bottom, not the 100% line
+ch.category_axis.tick_label_position = XL_TICK_LABEL_POSITION.LOW
 ch.has_title = False
 ch.has_legend = True
 ch.legend.position = XL_LEGEND_POSITION.BOTTOM
