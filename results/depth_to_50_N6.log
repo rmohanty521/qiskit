@@ -1,0 +1,12 @@
+N=6 p=11: average cost  2.839, P(correct)  11.90%  (4 s)
+N=6 p=12: average cost  2.670, P(correct)  14.84%  (9 s)
+N=6 p=13: average cost  2.506, P(correct)  17.96%  (14 s)
+N=6 p=14: average cost  2.345, P(correct)  21.24%  (20 s)
+N=6 p=15: average cost  2.189, P(correct)  24.82%  (26 s)
+N=6 p=16: average cost  2.038, P(correct)  28.72%  (32 s)
+N=6 p=17: average cost  1.894, P(correct)  32.97%  (38 s)
+N=6 p=18: average cost  1.758, P(correct)  37.65%  (45 s)
+N=6 p=19: average cost  1.633, P(correct)  42.47%  (52 s)
+N=6 p=20: average cost  1.520, P(correct)  46.64%  (59 s)
+N=6 p=21: average cost  1.422, P(correct)  50.44%  (67 s)
+N=6: reached 50% at p = 21
