@@ -80,7 +80,7 @@ All rows ran on Amazon Braket's SV1 simulator through qBraid. Every P(correct to
 
 ## AI use note
 
-We used **Claude Code** (Anthropic) as a coding agent throughout. It proposed and wrote the compact encoding, the Hamiltonian builder, the constrained mixer, the exact 6^N simulator, the angle tuning, the notebook (`build_notebook.py`), the slides (`build_slides.py`) and drafts of this README. We decided the approach and reviewed the code.
+We used **Claude Code** (Anthropic) as a coding agent throughout. It proposed and wrote the compact encoding, the Hamiltonian builder, the constrained mixer, the exact 6^N simulator, the angle tuning, the notebook (`build_notebook.py`). We decided the approach and reviewed the code.
 
 How we kept it correct:
 - **Model vs brute force:** the Hamiltonian is compared with the classical cost on every valid state (or a large seeded sample for N = 7, 8). Its zero-energy states are compared with `count_answers` and with an independent graph-method enumeration.
