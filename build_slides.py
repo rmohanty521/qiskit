@@ -362,16 +362,13 @@ MEDIAN = {n: sorted(v)[len(v) // 2] if len(v) % 2 else sum(sorted(v)[len(v) // 2
 CLASSICAL = {r["n"]: r for r in json.load(open("results/classical_times.json"))}
 REF8 = json.load(open("results/depth_to_50_N8.json"))["reached_at_p"]
 CX_PER_LAYER_8 = next(r["cx"] for r in SCALE if r["n"] == 8) / 10
-soft = RGBColor.from_string("C9D3DA")
-MINT, ORANGE = RGBColor.from_string("5FD4C8"), RGBColor.from_string("F0B070")
 
 s = prs.slides.add_slide(BLANK)
-bg(s, DARK)
-tower(s, 0.9, 0.55, 0.17)
-text(s, 1.35, 0.4, 11.5, 0.8, "What we learned, and what we'd try next", size=32, font=HEAD, bold=True, colour=WHITE)
+title(s, "What we learned, and what we'd try next",
+      "How many layers QAOA needs, and how it compares with a real classical solver")
 
 # chart: layers needed for 50% success, every puzzle as a dot, the median per size as a line
-text(s, 0.8, 1.45, 6.4, 0.5, "Layers needed to reach 50% success", size=16, bold=True, colour=WHITE)
+text(s, 0.8, 1.75, 6.4, 0.4, "Layers needed to reach 50% success", size=15, bold=True, colour=INK)
 cd = XyChartData()
 dots = cd.add_series("each puzzle")
 for n in NS:
@@ -380,56 +377,52 @@ for n in NS:
 line = cd.add_series("median")
 for n in NS:
     line.add_data_point(n, MEDIAN[n])
-ch = s.shapes.add_chart(XL_CHART_TYPE.XY_SCATTER_LINES, Inches(0.6), Inches(1.85), Inches(6.6), Inches(4.4), cd).chart
-ch.font.size, ch.font.name, ch.font.color.rgb = Pt(12), BODY, soft
+ch = s.shapes.add_chart(XL_CHART_TYPE.XY_SCATTER_LINES, Inches(0.6), Inches(2.1), Inches(6.6), Inches(4.3), cd).chart
+style_chart(ch, "layers p", "N cubes")
 ch.has_title = False
 ch.has_legend = True
 ch.legend.position = XL_LEGEND_POSITION.BOTTOM
 ch.legend.include_in_layout = False
-ch.legend.font.color.rgb = soft
 va, xa = ch.value_axis, ch.category_axis
 va.minimum_scale, va.maximum_scale, va.major_unit = 0, 40, 10
 xa.minimum_scale, xa.maximum_scale, xa.major_unit = 3, 9, 1
-va.has_major_gridlines = True
-va.major_gridlines.format.line.color.rgb = RGBColor.from_string("2E3D4A")
-for ax, t in ((va, "layers p"), (xa, "N cubes")):
-    ax.has_title = True
-    ax.axis_title.text_frame.text = t
-    r = ax.axis_title.text_frame.paragraphs[0].runs[0]
-    r.font.size, r.font.bold, r.font.color.rgb = Pt(12), False, soft
-    ax.tick_labels.font.color.rgb = soft
-    ax.format.line.color.rgb = RGBColor.from_string("4A5A68")
 xa.has_major_gridlines = False
 d, m = ch.plots[0].series
 d.format.line.fill.background()                       # dots only, no connecting line
 d.marker.style, d.marker.size = XL_MARKER_STYLE.CIRCLE, 8
 d.marker.format.fill.solid()
-d.marker.format.fill.fore_color.rgb = ORANGE
+d.marker.format.fill.fore_color.rgb = AMBER
 d.marker.format.line.fill.background()
-m.format.line.color.rgb, m.format.line.width = MINT, Pt(3)
+m.format.line.color.rgb, m.format.line.width = TEAL, Pt(2.5)
 m.marker.style, m.marker.size = XL_MARKER_STYLE.DIAMOND, 9
 m.marker.format.fill.solid()
-m.marker.format.fill.fore_color.rgb = MINT
+m.marker.format.fill.fore_color.rgb = TEAL
 m.smooth = False
 n_puzzles = sum(len(v) for v in DEPTH.values())
-text(s, 0.8, 6.35, 6.4, 0.9, f"{n_puzzles} puzzles, exact simulation, angles tuned on the average cost only. "
-     "Puzzles of the same size differ a lot, so one puzzle per size is not enough.", size=12, colour=soft)
+text(s, 0.8, 6.5, 6.4, 0.8, f"{n_puzzles} puzzles, exact simulation, angles tuned on the average cost only. "
+     "Puzzles of the same size differ a lot, so one puzzle per size is not enough.", size=12, colour=GREY)
 
 # right column: learned, fair comparison, next step
-text(s, 7.6, 1.45, 5.2, 5.8, [
-    [("Learned", {"bold": True, "size": 19, "colour": MINT, "font": HEAD})],
+card(s, 7.6, 1.75, 5.2, 2.15)
+text(s, 7.85, 1.85, 4.8, 2.0, [
+    [("Learned", {"bold": True, "size": 17, "colour": TEAL, "font": HEAD})],
     "Rules built into the encoding: half the qubits, no penalties, 0 wasted shots.",
     "QAOA concentrates probability on the answer (73% vs 0.15% guessing), checked shot by shot.",
     "Layers needed grow with N, and vary a lot between puzzles of the same size.",
-    [("Fair comparison: no quantum advantage", {"bold": True, "size": 19, "colour": ORANGE, "font": HEAD})],
+], size=13, space=4)
+card(s, 7.6, 4.05, 5.2, 1.65)
+text(s, 7.85, 4.15, 4.8, 1.5, [
+    [("Fair comparison: no quantum advantage", {"bold": True, "size": 17, "colour": AMBER, "font": HEAD})],
     [(f"A smart classical solver finds the 8-cube tower in {CLASSICAL[8]['graph_s'] * 1000:.0f} ms. ", {}),
      (f"QAOA would need about {CX_PER_LAYER_8 * REF8 / 1000:.0f},000 CNOTs per shot at 50%, ", {}),
      ("plus thousands of runs to tune: far beyond today's hardware.", {})],
-    [("Next step", {"bold": True, "size": 19, "colour": WHITE, "font": HEAD})],
-    "Track how layers grow at larger N, with CVaR (tune for the best shots, not the average).",
+], size=13, space=4)
+text(s, 7.6, 5.85, 5.2, 1.5, [
+    [("Next step: ", {"bold": True, "colour": TEAL}),
+     ("track how layers grow at larger N, with CVaR (tune for the best shots, not the average).", {})],
     [("AI use: Claude Code wrote code and docs; every model was checked against brute force.",
-      {"italic": True, "size": 12})],
-], size=14, colour=soft, space=7)
+      {"italic": True, "size": 11, "colour": GREY})],
+], size=13, space=6)
 s.notes_slide.notes_text_frame.text = ("Speaker 3: the chart answers 'how many layers to keep success at 50%?'. "
                                        "Then the fair comparison: classical wins clearly at these sizes. Close with the next step.")
 
