@@ -89,3 +89,4 @@ How we kept it correct:
 - **Decoder:** tested on a known answer, given Qiskit's bit order.
 - **Every reported tower** passes the starter's `solves`, and angles are tuned on average cost only, never on the answer.
 - No API keys are in the code. `QbraidProvider()` reads the credentials from the environment.
+--
